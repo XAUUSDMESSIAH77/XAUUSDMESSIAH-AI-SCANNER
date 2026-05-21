@@ -21,38 +21,54 @@
             color: var(--text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 16px;
             display: flex;
             justify-content: center;
         }
 
         .dashboard-container {
             width: 100%;
-            max-width: 480px; /* Constrained to match clean mobile app layout layout */
+            max-width: 440px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
         header {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             letter-spacing: 1.2px;
-            color: var(--text-primary);
-            padding: 10px 0;
+            color: #FFC107;
             text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Card Panels Layout */
+        .live-pulse {
+            width: 8px;
+            height: 8px;
+            background-color: #00E676;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #00E676;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
         .card {
             background-color: var(--card-color);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 18px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        /* Dual Timeframe Tab Bar */
+        /* Interactive Timeframe Tab Bar */
         .tab-bar {
             display: flex;
             border-bottom: 2px solid var(--border-color);
@@ -62,12 +78,13 @@
         .tab {
             flex: 1;
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             cursor: pointer;
             color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: bold;
+            font-size: 13px;
             transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .tab.active {
@@ -77,21 +94,19 @@
 
         .chart-frame {
             width: 100%;
-            height: 220px;
+            height: 200px;
             background-color: #0A0D14;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-radius: 10px;
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--border-color);
         }
 
         .chart-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: opacity 0.2s ease;
         }
 
         .ai-badge {
@@ -99,16 +114,16 @@
             bottom: 8px;
             left: 8px;
             right: 8px;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(15, 20, 28, 0.9);
             padding: 6px;
             border-radius: 6px;
             font-size: 11px;
             color: #00E676;
             text-align: center;
-            font-weight: 500;
+            border: 1px solid rgba(0, 230, 118, 0.2);
         }
 
-        /* Main Signal Header Section */
+        /* Signal Header */
         .signal-header {
             display: flex;
             justify-content: space-between;
@@ -116,243 +131,214 @@
         }
 
         .signal-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
-            margin: 0 0 6px 0;
+            margin: 0 0 4px 0;
         }
 
         .signal-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
             margin: 0;
         }
 
         .action-badge {
-            background-color: var(--accent-red);
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 6px 14px;
+            border-radius: 6px;
             font-weight: bold;
             text-transform: uppercase;
+            font-size: 13px;
+            color: white;
+            transition: background-color 0.3s;
         }
 
-        /* Progress Engine Components */
+        /* Progress Strength Bar */
         .progress-wrapper {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-top: 12px;
+            gap: 12px;
+            margin-top: 10px;
         }
 
         .progress-bar-bg {
             flex: 1;
-            height: 12px;
+            height: 10px;
             background-color: var(--border-color);
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
         }
 
         .progress-bar-fill {
             height: 100%;
             background-color: #00E676;
-            width: 0%; /* Dynamic update */
-            transition: width 0.6s ease;
+            width: 85%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .confidence-pct {
             color: #00E676;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
+            min-width: 35px;
+            text-align: right;
         }
 
-        /* Price Targets Matrix Design */
+        /* Matrix Target Slots Layout */
         .matrix-grid {
             display: flex;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            margin-top: 12px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
         }
 
         .matrix-tile {
             flex: 1;
-            padding: 16px 4px;
+            padding: 12px 2px;
             text-align: center;
             font-size: 11px;
+            transition: all 0.3s;
         }
 
         .matrix-tile .price {
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
+            color: white;
+            font-size: 12px;
         }
 
         .matrix-tile .label {
-            display: inline-block;
-            background: rgba(0,0,0,0.25);
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: rgba(255,255,255,0.7);
-        }
-
-        /* Metric Rows layout */
-        .metric-row {
-            display: flex;
-            gap: 12px;
-        }
-
-        .metric-title {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin: 0 0 8px 0;
-        }
-
-        .metric-value {
-            font-size: 22px;
+            font-size: 9px;
             font-weight: bold;
-            margin: 0 0 4px 0;
+            opacity: 0.7;
         }
 
-        .metric-status {
-            font-size: 13px;
+        /* Extra Information Footprint Row */
+        .metric-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
 
 <div class="dashboard-container">
-    <header id="asset-title">AI Multi-Timeframe Scanner</header>
+    <header>
+        <span>XAUUSD • TEST ENGINE ACTIVE</span>
+        <span class="live-pulse"></span>
+    </header>
 
     <div class="card">
         <div class="tab-bar">
-            <div class="tab active" onclick="switchTab('h4')">H4 Macro View</div>
-            <div class="tab" onclick="switchTab('m15')">M15 Execution View</div>
+            <div id="btn-h4" class="tab active" onclick="switchView('h4')">4H Higher View</div>
+            <div id="btn-m15" class="tab" onclick="switchView('m15')">15M Entry Spot</div>
         </div>
         <div class="chart-frame">
-            <img id="chart-display" class="chart-img" src="" alt="Awaiting chart telemetry...">
-            <div id="ai-tag" class="ai-badge">Analyzing market telemetry...</div>
+            <img id="chart-display" class="chart-img" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600" alt="Chart Snap">
+            <div id="ai-tag" class="ai-badge">H4: Bearish Break of Structure Confirmed</div>
         </div>
     </div>
 
     <div class="card">
         <div class="signal-header">
             <div>
-                <h2 class="signal-title" id="signal-txt">Awaiting Signal...</h2>
-                <p class="signal-desc" id="signal-desc">Scanning global server structures...</p>
+                <h2 class="signal-title" id="signal-txt">SELL SIGNAL</h2>
+                <p class="signal-desc" id="signal-desc">Premium mitigation block entry validated</p>
             </div>
-            <div class="action-badge" id="side-badge">-</div>
+            <div class="action-badge" id="side-badge" style="background-color: var(--accent-red);">SELL</div>
         </div>
     </div>
 
     <div class="card">
-        <div style="font-weight: 600; font-size: 16px;">Signal Strength</div>
-        <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">Based on model bounding box spatial verification</div>
+        <div style="font-weight: 600; font-size: 13px;">AI Model Confidence Score</div>
         <div class="progress-wrapper">
             <div class="progress-bar-bg">
-                <div id="confidence-bar" class="progress-bar-fill"></div>
+                <div id="confidence-bar" class="progress-bar-fill" style="width: 88%;"></div>
             </div>
-            <span id="confidence-text" class="confidence-pct">0%</span>
+            <span id="confidence-text" class="confidence-pct">88%</span>
         </div>
     </div>
 
     <div class="card">
-        <div style="font-weight: bold; font-size: 14px;">Calculated Price Targets</div>
+        <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">Calculated Target Parameters</div>
         <div class="matrix-grid">
             <div class="matrix-tile" style="background-color: #3A1E24;">
-                <div class="price" id="sl-val">-</div><div class="label">SL</div>
+                <div class="price" id="sl-val">2435.50</div><div class="label" style="color:#FF5252;">SL</div>
             </div>
             <div class="matrix-tile" style="background-color: #1E293B;">
-                <div class="price" id="entry-val">-</div><div class="label">Entry</div>
+                <div class="price" id="entry-val">2418.00</div><div class="label" style="color:#448AFF;">ENTRY</div>
             </div>
             <div class="matrix-tile" style="background-color: #1A332E;">
-                <div class="price" id="tp1-val">-</div><div class="label">TP1</div>
+                <div class="price" id="tp1-val">2395.00</div><div class="label" style="color:#00E676;">TP1</div>
             </div>
             <div class="matrix-tile" style="background-color: #142928;">
-                <div class="price" id="tp2-val">-</div><div class="label">TP2</div>
+                <div class="price" id="tp2-val">2370.00</div><div class="label" style="color:#00C853;">TP2</div>
             </div>
         </div>
     </div>
 
-    <div class="card metric-row">
-        <div style="color: var(--text-secondary); margin-top: 2px;">📊</div>
-        <div>
-            <p class="metric-title">Current Market Volatility</p>
-            <h3 class="metric-value" id="vol-val">-</h3>
-            <span class="metric-status" id="vol-status" style="color: #FFC107;">Calculating...</span>
-        </div>
+    <div class="metric-footer">
+        <span>Volatility Index: 2.45%</span>
+        <span style="color:#00E676;">Scanner Status: Online</span>
     </div>
 </div>
 
 <script>
-    // --- Front End State System ---
-    let cachedData = null;
-    let currentTab = 'h4';
-
-    // Target API endpoint pointing directly to your live AI server engine
-    const API_ENDPOINT = "https://your-ai-scanner.render.com/api/latest-signal";
-
-    async function fetchLatestSignals() {
-        try {
-            const response = await fetch(API_ENDPOINT);
-            cachedData = await response.json();
-            updateUIDashboard();
-        } catch (error) {
-            console.error("Telemetry link offline:", error);
+    // Local test data dataset matrix to change UI values instantly on tap
+    const testDataset = {
+        h4: {
+            img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600",
+            tag: "H4 Matrix: Core Order Block Identified",
+            signal: "SELL TRADING SIGNAL",
+            desc: "Macro structural analysis signals high-volume distributions",
+            side: "SELL",
+            color: "#D32F2F",
+            confidence: 88,
+            sl: "2435.50", entry: "2418.00", tp1: "2395.00", tp2: "2370.00"
+        },
+        m15: {
+            img: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=600",
+            tag: "M15 Matrix: Local Liquidity Sweep Executing",
+            signal: "BUY RETEST SETUP",
+            desc: "Micro scaling reveals short term demand zone reaction",
+            side: "BUY",
+            color: "#388E3C",
+            confidence: 74,
+            sl: "2410.00", entry: "2415.50", tp1: "2428.00", tp2: "2442.00"
         }
-    }
+    };
 
-    function updateUIDashboard() {
-        if (!cachedData) return;
-
-        // Populate text positions
-        document.getElementById("asset-title").innerText = `${cachedData.pair} • LIVE`;
-        document.getElementById("signal-txt").innerText = `${cachedData.direction} Signal`;
-        document.getElementById("signal-desc").innerText = "H4 Structural footprint verified on lower frames";
+    function switchView(selectedTimeframe) {
+        // Remove active class from tabs
+        document.getElementById('btn-h4').classList.remove('active');
+        document.getElementById('btn-m15').classList.remove('active');
         
-        const sideBadge = document.getElementById("side-badge");
-        sideBadge.innerText = cachedData.direction;
-        sideBadge.style.backgroundColor = cachedData.direction === "SELL" ? "#D32F2F" : "#388E3C";
-
-        // Handle Confidence Progress Bars Animations
-        document.getElementById("confidence-bar").style.width = `${cachedData.confidence}%`;
-        document.getElementById("confidence-text").innerText = `${cachedData.confidence}%`;
-
-        // Populate Price matrices
-        document.getElementById("sl-val").innerText = cachedData.sl.toFixed(2);
-        document.getElementById("entry-val").innerText = cachedData.entry.toFixed(2);
-        document.getElementById("tp1-val").innerText = cachedData.tp1.toFixed(2);
-        document.getElementById("tp2-val").innerText = cachedData.tp2.toFixed(2);
-
-        // Update volatility boxes
-        document.getElementById("vol-val").innerText = "2.10%";
-        document.getElementById("vol-status").innerText = "High Volatility Environment";
-
-        // Render correct active tab image paths
-        renderActiveChart();
+        // Highlight chosen selection
+        document.getElementById('btn-' + selectedTimeframe).classList.add('active');
+        
+        // Grab values from dummy array variables
+        const currentData = testDataset[selectedTimeframe];
+        
+        // Render UI changes instantly on mobile DOM trees
+        document.getElementById('chart-display').src = currentData.img;
+        document.getElementById('ai-tag').innerText = currentData.tag;
+        document.getElementById('signal-txt').innerText = currentData.signal;
+        document.getElementById('signal-desc').innerText = currentData.desc;
+        
+        const badge = document.getElementById('side-badge');
+        badge.innerText = currentData.side;
+        badge.style.backgroundColor = currentData.color;
+        
+        document.getElementById('confidence-bar').style.width = currentData.confidence + '%';
+        document.getElementById('confidence-text').innerText = currentData.confidence + '%';
+        
+        document.getElementById('sl-val').innerText = currentData.sl;
+        document.getElementById('entry-val').innerText = currentData.entry;
+        document.getElementById('tp1-val').innerText = currentData.tp1;
+        document.getElementById('tp2-val').innerText = currentData.tp2;
     }
-
-    function switchTab(timeframe) {
-        currentTab = timeframe;
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        event.target.classList.add('active');
-        renderActiveChart();
-    }
-
-    function renderActiveChart() {
-        if (!cachedData) return;
-        const imgElement = document.getElementById("chart-display");
-        const tagElement = document.getElementById("ai-tag");
-
-        if (currentTab === 'h4') {
-            imgElement.src = cachedData.chart_h4_url;
-            tagElement.innerText = "H4 Macro: Institutional Order Block Localized";
-        } else {
-            imgElement.src = cachedData.chart_m15_url;
-            tagElement.innerText = "M15 Execution: Fair Value Gap Cleared & Confirmed";
-        }
-    }
-
-    // Start network fetch telemetry immediately on launch
-    fetchLatestSignals();
-    // Keep console interface updated automatically every 60 seconds
-    setInterval(fetchLatestSignals, 60000);
 </script>
 </body>
 </html>
