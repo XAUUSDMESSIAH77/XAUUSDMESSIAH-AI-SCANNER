@@ -43,6 +43,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding-bottom: 4px;
+            pointer-events: none; /* Prevents the header from blocking any click/tap events */
         }
 
         .live-pulse {
@@ -66,30 +68,39 @@
             border-radius: 14px;
             padding: 18px;
             border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 1;
         }
 
-        /* Interactive Timeframe Tab Bar */
+        /* Interactive Timeframe Tab Bar - Optimized for direct mobile touch targets */
         .tab-bar {
             display: flex;
             border-bottom: 2px solid var(--border-color);
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 10; /* Forces buttons to sit above any backgrounds */
         }
 
         .tab {
             flex: 1;
             text-align: center;
-            padding: 10px;
+            padding: 14px 10px; /* Enhanced vertical tap tracking */
             cursor: pointer;
             color: var(--text-secondary);
             font-weight: bold;
             font-size: 13px;
             transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: rgba(255, 193, 7, 0.1); /* Visible feedback ring on tap */
+        }
+
+        .tab:active {
+            background-color: rgba(255, 255, 255, 0.03); /* Soft click visual response */
         }
 
         .tab.active {
             color: var(--text-primary);
             border-bottom: 2px solid #FFC107;
+            background-color: rgba(255, 193, 7, 0.04);
         }
 
         .chart-frame {
@@ -100,13 +111,13 @@
             position: relative;
             overflow: hidden;
             border: 1px solid var(--border-color);
+            z-index: 2;
         }
 
         .chart-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.2s ease;
         }
 
         .ai-badge {
@@ -123,7 +134,7 @@
             border: 1px solid rgba(0, 230, 118, 0.2);
         }
 
-        /* Signal Header */
+        /* Signal Header Elements */
         .signal-header {
             display: flex;
             justify-content: space-between;
@@ -149,7 +160,6 @@
             text-transform: uppercase;
             font-size: 13px;
             color: white;
-            transition: background-color 0.3s;
         }
 
         /* Progress Strength Bar */
@@ -171,8 +181,8 @@
         .progress-bar-fill {
             height: 100%;
             background-color: #00E676;
-            width: 85%;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 88%;
+            transition: width 0.4s ease-out;
         }
 
         .confidence-pct {
@@ -183,7 +193,7 @@
             text-align: right;
         }
 
-        /* Matrix Target Slots Layout */
+        /* Target Matrix Parameters */
         .matrix-grid {
             display: flex;
             border-radius: 10px;
@@ -197,7 +207,6 @@
             padding: 12px 2px;
             text-align: center;
             font-size: 11px;
-            transition: all 0.3s;
         }
 
         .matrix-tile .price {
@@ -213,12 +222,12 @@
             opacity: 0.7;
         }
 
-        /* Extra Information Footprint Row */
         .metric-footer {
             display: flex;
             justify-content: space-between;
             font-size: 12px;
             color: var(--text-secondary);
+            padding-top: 4px;
         }
     </style>
 </head>
@@ -286,7 +295,7 @@
 </div>
 
 <script>
-    // Local test data dataset matrix to change UI values instantly on tap
+    // Local matrix arrays to update data parameters instantly on touch
     const testDataset = {
         h4: {
             img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600",
@@ -311,17 +320,14 @@
     };
 
     function switchView(selectedTimeframe) {
-        // Remove active class from tabs
+        // Toggle selected styling attributes
         document.getElementById('btn-h4').classList.remove('active');
         document.getElementById('btn-m15').classList.remove('active');
-        
-        // Highlight chosen selection
         document.getElementById('btn-' + selectedTimeframe).classList.add('active');
         
-        // Grab values from dummy array variables
         const currentData = testDataset[selectedTimeframe];
         
-        // Render UI changes instantly on mobile DOM trees
+        // Dynamically shift DOM values instantly
         document.getElementById('chart-display').src = currentData.img;
         document.getElementById('ai-tag').innerText = currentData.tag;
         document.getElementById('signal-txt').innerText = currentData.signal;
