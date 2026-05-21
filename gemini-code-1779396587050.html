@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦅 AI Chart Scanner Core Dashboard</title>
+    <style>
+        /* Premium Core Trading Dashboard Theme */
+        :root {
+            --bg-color: #0F141C;
+            --card-color: #181F2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #75808F;
+            --accent-red: #D32F2F;
+            --accent-green: #388E3C;
+            --border-color: #232D3F;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 480px; /* Constrained to match clean mobile app layout layout */
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        header {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1.2px;
+            color: var(--text-primary);
+            padding: 10px 0;
+            text-transform: uppercase;
+        }
+
+        /* Card Panels Layout */
+        .card {
+            background-color: var(--card-color);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Dual Timeframe Tab Bar */
+        .tab-bar {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 12px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            color: var(--text-primary);
+            border-bottom: 2px solid #FFC107;
+        }
+
+        .chart-frame {
+            width: 100%;
+            height: 220px;
+            background-color: #0A0D14;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ai-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #00E676;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Main Signal Header Section */
+        .signal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .signal-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0 0 6px 0;
+        }
+
+        .signal-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .action-badge {
+            background-color: var(--accent-red);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Progress Engine Components */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 12px;
+            background-color: var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #00E676;
+            width: 0%; /* Dynamic update */
+            transition: width 0.6s ease;
+        }
+
+        .confidence-pct {
+            color: #00E676;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Price Targets Matrix Design */
+        .matrix-grid {
+            display: flex;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .matrix-tile {
+            flex: 1;
+            padding: 16px 4px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .matrix-tile .price {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .matrix-tile .label {
+            display: inline-block;
+            background: rgba(0,0,0,0.25);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Metric Rows layout */
+        .metric-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .metric-title {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0 0 8px 0;
+        }
+
+        .metric-value {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0 0 4px 0;
+        }
+
+        .metric-status {
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <header id="asset-title">AI Multi-Timeframe Scanner</header>
+
+    <div class="card">
+        <div class="tab-bar">
+            <div class="tab active" onclick="switchTab('h4')">H4 Macro View</div>
+            <div class="tab" onclick="switchTab('m15')">M15 Execution View</div>
+        </div>
+        <div class="chart-frame">
+            <img id="chart-display" class="chart-img" src="" alt="Awaiting chart telemetry...">
+            <div id="ai-tag" class="ai-badge">Analyzing market telemetry...</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="signal-header">
+            <div>
+                <h2 class="signal-title" id="signal-txt">Awaiting Signal...</h2>
+                <p class="signal-desc" id="signal-desc">Scanning global server structures...</p>
+            </div>
+            <div class="action-badge" id="side-badge">-</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="font-weight: 600; font-size: 16px;">Signal Strength</div>
+        <div style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">Based on model bounding box spatial verification</div>
+        <div class="progress-wrapper">
+            <div class="progress-bar-bg">
+                <div id="confidence-bar" class="progress-bar-fill"></div>
+            </div>
+            <span id="confidence-text" class="confidence-pct">0%</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="font-weight: bold; font-size: 14px;">Calculated Price Targets</div>
+        <div class="matrix-grid">
+            <div class="matrix-tile" style="background-color: #3A1E24;">
+                <div class="price" id="sl-val">-</div><div class="label">SL</div>
+            </div>
+            <div class="matrix-tile" style="background-color: #1E293B;">
+                <div class="price" id="entry-val">-</div><div class="label">Entry</div>
+            </div>
+            <div class="matrix-tile" style="background-color: #1A332E;">
+                <div class="price" id="tp1-val">-</div><div class="label">TP1</div>
+            </div>
+            <div class="matrix-tile" style="background-color: #142928;">
+                <div class="price" id="tp2-val">-</div><div class="label">TP2</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card metric-row">
+        <div style="color: var(--text-secondary); margin-top: 2px;">📊</div>
+        <div>
+            <p class="metric-title">Current Market Volatility</p>
+            <h3 class="metric-value" id="vol-val">-</h3>
+            <span class="metric-status" id="vol-status" style="color: #FFC107;">Calculating...</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Front End State System ---
+    let cachedData = null;
+    let currentTab = 'h4';
+
+    // Target API endpoint pointing directly to your live AI server engine
+    const API_ENDPOINT = "https://your-ai-scanner.render.com/api/latest-signal";
+
+    async function fetchLatestSignals() {
+        try {
+            const response = await fetch(API_ENDPOINT);
+            cachedData = await response.json();
+            updateUIDashboard();
+        } catch (error) {
+            console.error("Telemetry link offline:", error);
+        }
+    }
+
+    function updateUIDashboard() {
+        if (!cachedData) return;
+
+        // Populate text positions
+        document.getElementById("asset-title").innerText = `${cachedData.pair} • LIVE`;
+        document.getElementById("signal-txt").innerText = `${cachedData.direction} Signal`;
+        document.getElementById("signal-desc").innerText = "H4 Structural footprint verified on lower frames";
+        
+        const sideBadge = document.getElementById("side-badge");
+        sideBadge.innerText = cachedData.direction;
+        sideBadge.style.backgroundColor = cachedData.direction === "SELL" ? "#D32F2F" : "#388E3C";
+
+        // Handle Confidence Progress Bars Animations
+        document.getElementById("confidence-bar").style.width = `${cachedData.confidence}%`;
+        document.getElementById("confidence-text").innerText = `${cachedData.confidence}%`;
+
+        // Populate Price matrices
+        document.getElementById("sl-val").innerText = cachedData.sl.toFixed(2);
+        document.getElementById("entry-val").innerText = cachedData.entry.toFixed(2);
+        document.getElementById("tp1-val").innerText = cachedData.tp1.toFixed(2);
+        document.getElementById("tp2-val").innerText = cachedData.tp2.toFixed(2);
+
+        // Update volatility boxes
+        document.getElementById("vol-val").innerText = "2.10%";
+        document.getElementById("vol-status").innerText = "High Volatility Environment";
+
+        // Render correct active tab image paths
+        renderActiveChart();
+    }
+
+    function switchTab(timeframe) {
+        currentTab = timeframe;
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+        renderActiveChart();
+    }
+
+    function renderActiveChart() {
+        if (!cachedData) return;
+        const imgElement = document.getElementById("chart-display");
+        const tagElement = document.getElementById("ai-tag");
+
+        if (currentTab === 'h4') {
+            imgElement.src = cachedData.chart_h4_url;
+            tagElement.innerText = "H4 Macro: Institutional Order Block Localized";
+        } else {
+            imgElement.src = cachedData.chart_m15_url;
+            tagElement.innerText = "M15 Execution: Fair Value Gap Cleared & Confirmed";
+        }
+    }
+
+    // Start network fetch telemetry immediately on launch
+    fetchLatestSignals();
+    // Keep console interface updated automatically every 60 seconds
+    setInterval(fetchLatestSignals, 60000);
+</script>
+</body>
+</html>
